@@ -19,7 +19,7 @@ services:
   node:
     type: 'node:16'
   myservice:
-    type: elasticsearch
+    type: elasticsearch:7.6.1
 #  redis-cache: # Add a redis cache service to your project
 #    type: redis
 #  redis-session: # Add a redis session service
