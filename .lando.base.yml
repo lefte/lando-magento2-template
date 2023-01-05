@@ -21,7 +21,7 @@ proxy:
 # Configure the LEMP recipe
 config:
   # PHP 7.2 for Magento 2.2.3 - adjust as needed
-  php: '7.2'
+  php: '8.1'
   webroot: pub
   database: mysql
   composer_version: '1.10.21'

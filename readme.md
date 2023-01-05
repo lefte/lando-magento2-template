@@ -45,7 +45,7 @@ lando --help magento:download
 # Download Magento. Drop arguments for interactive mode.
 cd lando-magento2-template
 lando magento:download --mage-edition "Open Source" \
-    --mage-version 2.3.5 \
+    --mage-version 2.4.5 \
     --mage-access-key-private $MAGE_PRIVATE_KEY \
     --mage-access-key-public $MAGE_PUBLIC_KEY \
     --github-token $MY_GITHUB_TOKEN \
@@ -64,7 +64,7 @@ cat auth.json
 cd lando-magento2-template
 lando start
 lando composer install
-lando magento:setup:quick --use-sample-data
+lando bin/magento setup:install --db-host database --db-name lemp --db-user lemp --db-password lemp --magento-init-params="MAGE_MODE=developer" --use-sample-data
 ```
 
 That's it! Your store is ready for development: https://magento2.lndo.site/  
@@ -109,8 +109,8 @@ Where is my admin?
 ------------------
 
 If you did not pass specify arguments for `lando magento:setup:quick`, you will probably want to know your admin URI and to create an admin user.
- - Fetch Admin URI: `lando magento info:adminuri`
- - Create admin user: `lando magento admin:user:create`
+ - Fetch Admin URI: `lando php bin/magento info:adminuri`
+ - Create admin user: `lando php bin/magento admin:user:create`
 
 Cleanup
 -------

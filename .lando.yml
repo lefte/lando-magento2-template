@@ -6,12 +6,20 @@
 #  config for your devs to quickly spin up services such as Redis, Elasticsearch, as well as
 #  project-specific build steps.
 ###
-
 name: magento2 # This should be set per project to override .lando.base.yml
-
-#service:
+config:
+  php: '8.1'
+services:
+  appserver:
+    # This will only run the first time `lando start` is executed or on `lando rebuild`
+    build_as_root:
+      # Install Magento-required xsl extension
+      - apt-get update -y -q && apt-get install -y libxslt-dev && docker-php-ext-install xsl && docker-php-ext-install sockets
+  node:
+    type: 'node:16'
+  myservice:
+    type: elasticsearch
 #  redis-cache: # Add a redis cache service to your project
 #    type: redis
 #  redis-session: # Add a redis session service
 #    type: redis
-
