@@ -64,7 +64,7 @@ cat auth.json
 cd lando-magento2-template
 lando start
 lando composer install
-lando bin/magento setup:install --db-host database --db-name lemp --db-user lemp --db-password lemp --magento-init-params="MAGE_MODE=developer" --use-sample-data
+lando php bin/magento setup:install --db-host database --db-name lemp --db-user lemp --db-password lemp --magento-init-params="MAGE_MODE=developer" --use-sample-data
 ```
 
 That's it! Your store is ready for development: https://magento2.lndo.site/  
