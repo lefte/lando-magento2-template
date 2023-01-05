@@ -84,6 +84,26 @@ Alternatively localhost.xxxx URL's are available offline but change with every L
 
 `lando magento setup:store-config:set --base-url=$PROVIDE_URL --base-url-secure=$PROVIDE_URL`
 
+I can't access my site
+----------------------
+
+Chances are you need to update the env file:
+
+```
+'downloadable_domains' => [
+        'localhost'
+    ],
+```
+
+to
+
+```
+'downloadable_domains' => [
+        'localhost',
+        'magento2.lndo.site'
+    ],
+```
+
 Customizing Lando
 -----------------
 
