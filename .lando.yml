@@ -9,6 +9,7 @@
 name: magento2 # This should be set per project to override .lando.base.yml
 config:
   php: '8.1'
+  composer_version: '2.4.4'
 services:
   appserver:
     # This will only run the first time `lando start` is executed or on `lando rebuild`
