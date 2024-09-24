@@ -71,12 +71,31 @@ class magentoDownloaderCli
                 $this->input[$requiredArg] = trim($trimmedInput);
             }
 
-            if($input['mage-version'] === '2.3' || $input['mage-version'] === '2.3.0')
-                throw new Exception('Know setup:install bug in Magento 2.3.0. Please specify 2.3.1 or higher');
+            if ((strtolower($input['mage-edition']) !== "mage-os") && ($input['mage-version'] === '2.3' || $input['mage-version'] === '2.3.0'))
+                throw new Exception('There is a known setup:install bug in Magento 2.3.0. Please use 2.3.1 or higher');
         } catch (Exception $error) {
             echo "\n{$error->getMessage()}\n\n";
             exit(1);
         }
+    }
+
+    /**
+     * @return string
+     * @throws Exception
+     */
+    public function getRepo()
+    {
+        $input = $this->getInput();
+        switch (strtolower($input['mage-edition'])):
+            case 'open source':
+                return "https://repo.magento.com/";
+            case 'commerce':
+                return "https://repo.magento.com/";
+            case 'mage-os':
+                return "https://repo.mage-os.org/";
+            default:
+                throw new Exception('INVALID ARGUMENT: Unacceptable Magento Edition Provided.');
+        endswitch;
     }
 
     /**
@@ -91,6 +110,8 @@ class magentoDownloaderCli
                 return 'magento/project-community-edition';
             case 'commerce':
                 return 'magento/project-enterprise-edition';
+            case 'mage-os':
+                return 'mage-os/project-community-edition';
             default:
                 throw new Exception('INVALID ARGUMENT: Unacceptable Magento Edition Provided.');
         endswitch;
@@ -129,7 +150,7 @@ class magentoDownloaderCli
         echo "\n";
         echo "\n      If you experience difficulty installing Magento try running the above commands 1 at a time to see the error output";
         echo "\n";
-        echo "\n      That's it! You will then be able to access your Magento store at https://magento2.lndo.site/";
+        echo "\n      That's it! You will then be able to access your Magento store at https://landomagento2.lndo.site/";
         echo "\n";
         echo "\n      Run `lando` to see available shortcuts such as `lando magento` and `lando composer`!";
         echo "\n";
@@ -143,7 +164,7 @@ class magentoDownloaderCli
     private function createProject($composerAuth, array $input)
     {
         shell_exec('rm -rf /tmp/magento');
-        shell_exec("export COMPOSER_AUTH='{$composerAuth}'; composer create-project -n --no-install --repository-url=https://repo.magento.com/ {$this->getEdition()} /tmp/magento {$input['mage-version']}");
+        shell_exec("export COMPOSER_AUTH='{$composerAuth}'; composer create-project -n --no-install --repository-url={$this->getRepo()} {$this->getEdition()} /tmp/magento {$input['mage-version']}");
     }
 
     /**
@@ -152,10 +173,21 @@ class magentoDownloaderCli
     private function prepareProject($composerAuth)
     {
         shell_exec("cp -r /tmp/magento/. /app");
-        file_put_contents(
-            '/app/nginx.conf.sample',
-            fopen('https://raw.githubusercontent.com/magento/magento2/'.$this->input['mage-version'].'/nginx.conf.sample', 'r')
-        );
+        switch (strtolower($this->input['mage-edition'])):
+            case "open source":
+            case "commerce":
+                file_put_contents(
+                    '/app/nginx.conf.sample',
+                    fopen('https://raw.githubusercontent.com/magento/magento2/'.$this->input['mage-version'].'/nginx.conf.sample', 'r')
+                );
+                break;
+            case "mage-os":
+                file_put_contents(
+                    '/app/nginx.conf.sample',
+                    fopen('https://raw.githubusercontent.com/mage-os/mageos-magento2/'.$this->input['mage-version'].'/nginx.conf.sample', 'r')
+                );
+                break;
+        endswitch;
         file_put_contents("/app/auth.json", $composerAuth);
     }
 }

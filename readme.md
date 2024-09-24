@@ -5,7 +5,7 @@ Important notes
 
 1. This setup expects [Lando](https://docs.devwithlando.io/installation/installing.html) to be installed and ready to go on your machine
 1. This setup expects Magento's stock `nginx.conf.sample` to exist in Magento's project root.
-   - **NOTE**: If you follow the Quick Setup instructions this file will be automatically downloaded 
+   - **NOTE**: If you follow the Quick Setup instructions this file will be automatically downloaded
 1. You may experience performance gains by:
    - Adding Redis, Elasticsearch, etc.. These services can easily be added following Lando's documentation.
    - For Windows & MacOS, Lando has an experimental feature that disables file synchronization between the host and container that can be implemented as shown below. However, you will need to copy these files manually to your host if using an IDE that depends on the directories you exclude.
@@ -64,21 +64,21 @@ cat auth.json
 cd lando-magento2-template
 lando start
 lando composer install
-lando php bin/magento setup:install --db-host database --db-name lemp --db-user lemp --db-password lemp --magento-init-params="MAGE_MODE=developer" --use-sample-data --elasticsearch-host='myservice' --elasticsearch-port=9200 
+lando php bin/magento setup:install --db-host database --db-name lemp --db-user lemp --db-password lemp --magento-init-params="MAGE_MODE=developer" --use-sample-data --elasticsearch-host='elasticsearch' --elasticsearch-port=9200
 ```
 
-That's it! Your store is ready for development: https://magento2.lndo.site/  
+That's it! Your store is ready for development: https://landomagento2.lndo.site/
 
 ```
 # Confirm store is accessible via bash
-curl -I -k --fail -s https://magento2.lndo.site/home | grep 200 && echo "Good to go."
+curl -I -k --fail -s https://landomagento2.lndo.site/home | grep 200 && echo "Good to go."
 ```
 
-You should now be able to access your local installation of Magento: https://magento2.lndo.site/ (or whatever proxy value you have set in your lando.base.yaml file)
+You should now be able to access your local installation of Magento: https://landomagento2.lndo.site/ (or whatever proxy value you have set in your lando.base.yaml file)
 
 If you have followed the quick setup without providing any other parameters be aware your Magento database will have no base_url or base_url_secure values yet.  This can and in most cases will cause a redirect loop when acessing the Magento admin page.
 
-All lndo.site sub-domains https://magento2.lndo.site/ are real URL's, therefor won't be available offline.
+All lndo.site sub-domains https://landomagento2.lndo.site/ are real URL's, therefore they won't be available offline.
 
 Alternatively localhost.xxxx URL's are available offline but change with every Lando rebuild.  See `lando info` for your URIs that point to this sandbox. And, always, you can modify the URI with:
 
@@ -100,7 +100,7 @@ to
 ```
 'downloadable_domains' => [
         'localhost',
-        'magento2.lndo.site'
+        'landomagento2.lndo.site'
     ],
 ```
 
@@ -124,6 +124,11 @@ lando --help magento:setup:quick
 ```
 
 `lando magento:setup:quick` is an alias for `lando magento setup:install` and is pre-configured to set up the Lando DB connection.
+
+Downloading Mage-OS
+-------------------
+
+To download the Mage-OS distribution, in the `lando magento:download` command above, use `--mage-edition "Mage-OS"` with the correct version, such as `--mage-version 1.0.4`.
 
 Where is my admin?
 ------------------

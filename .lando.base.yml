@@ -16,15 +16,15 @@ recipe: lemp
 proxy:
   # Set Magento URL
   appserver_nginx:
-    - magento2.lndo.site
+    - landomagento2.lndo.site
 
 # Configure the LEMP recipe
 config:
   # PHP 7.2 for Magento 2.2.3 - adjust as needed
   php: '8.1'
   webroot: pub
-  database: mysql
-  composer_version: '1.10.21'
+  database: mariadb:10.6.19
+  composer_version: 2
 
   # Optionally activate xdebug
   xdebug: false
@@ -38,6 +38,11 @@ config:
     #php: config/php.ini
 
 services:
+  appserver_nginx:
+    type: nginx:1.24
+    scanner:
+      retry: 12
+
   # Provide some custom options for the database service
   database:
     # Make a random port available to the host machine for your MySQL connection.
@@ -69,6 +74,7 @@ tooling:
           choices:
             - Open Source
             - Commerce
+            - Mage-OS
 
       mage-version:
         passthrough: true
@@ -88,6 +94,7 @@ tooling:
 
             https://marketplace.magento.com/customer/accessKeys/
           weight: 600
+
       mage-access-key-public:
         passthrough: true
         describe: Magento Access Key (Public)
@@ -95,6 +102,7 @@ tooling:
           type: input
           message: Magento Access Key (Public)
           weight: 600
+
       mage-access-key-private:
         passthrough: true
         describe: Magento Access Key (Private)
@@ -102,6 +110,7 @@ tooling:
           type: password
           message: Magento Access Key (Private)
           weight: 600
+
       notify-github:
         passthrough: false
         interactive:
@@ -130,7 +139,8 @@ tooling:
 
   magento:
     description: Execute ./bin/magento commands
-    cmd: test -f /app/bin/magento && /app/bin/magento
+    # cmd: test -f /app/bin/magento && /app/bin/magento
+    cmd: /app/bin/magento
     service: appserver
 
   magento:setup:destroy:
